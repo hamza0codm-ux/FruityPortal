@@ -1,0 +1,3632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>FRT Staff Portal</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #080808;
+      --sidebar: #0d0d0d;
+      --card: #111111;
+      --card2: #151515;
+      --border: #242424;
+      --yellow: #facc15;
+      --yellow-hover: #fde047;
+      --white: #f5f5f5;
+      --muted: #858585;
+      --danger: #ef4444;
+      --green: #22c55e;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* LOGIN */
+
+    #loginPage {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 430px;
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .brand-logo {
+      width: 60px;
+      height: 60px;
+      background: var(--yellow);
+      color: #000;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 18px;
+      font-size: 25px;
+      font-weight: 950;
+    }
+
+    .brand h1 {
+      font-size: 30px;
+      font-weight: 950;
+      letter-spacing: -1px;
+    }
+
+    .brand p {
+      color: var(--muted);
+      margin-top: 7px;
+      font-size: 14px;
+    }
+
+    .login-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 30px;
+    }
+
+    .login-card h2 {
+      font-size: 22px;
+      margin-bottom: 7px;
+    }
+
+    .login-card-description {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      color: #aaa;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      background: #0b0b0b;
+      border: 1px solid #292929;
+      color: white;
+      border-radius: 8px;
+      padding: 13px 14px;
+      outline: none;
+      transition: .2s;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--yellow);
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .yellow-button {
+      width: 100%;
+      border: 0;
+      background: var(--yellow);
+      color: #000;
+      padding: 13px;
+      border-radius: 8px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      transition: .2s;
+    }
+
+    .yellow-button:hover {
+      background: var(--yellow-hover);
+    }
+
+    .outline-button {
+      width: 100%;
+      border: 1px solid #303030;
+      background: transparent;
+      color: #ddd;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      transition: .2s;
+    }
+
+    .outline-button:hover {
+      border-color: var(--yellow);
+      color: var(--yellow);
+    }
+
+    .login-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0;
+      color: #555;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .login-divider::before,
+    .login-divider::after {
+      content: "";
+      height: 1px;
+      background: var(--border);
+      flex: 1;
+    }
+
+    .small-link {
+      background: transparent;
+      border: 0;
+      color: #777;
+      font-size: 12px;
+      display: block;
+      margin: 14px auto 0;
+    }
+
+    .small-link:hover {
+      color: var(--yellow);
+    }
+
+    .login-message {
+      margin-bottom: 15px;
+      font-size: 13px;
+      color: var(--yellow);
+    }
+
+    /* MODAL */
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.78);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .modal {
+      background: #111;
+      border: 1px solid #292929;
+      border-radius: 15px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 27px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .modal-header h2 {
+      font-size: 21px;
+    }
+
+    .close-button {
+      background: transparent;
+      border: 0;
+      color: #777;
+      font-size: 25px;
+    }
+
+    .close-button:hover {
+      color: white;
+    }
+
+    /* PORTAL */
+
+    #portal {
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 235px;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      padding: 24px 14px;
+      overflow-y: auto;
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 5px 10px 25px;
+    }
+
+    .sidebar-logo {
+      width: 38px;
+      height: 38px;
+      background: var(--yellow);
+      color: #000;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 950;
+    }
+
+    .sidebar-brand-text strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .sidebar-brand-text span {
+      display: block;
+      color: #666;
+      font-size: 10px;
+      margin-top: 2px;
+    }
+
+    .nav-section {
+      margin-top: 20px;
+    }
+
+    .nav-title {
+      color: #555;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 1.3px;
+      padding: 0 11px 8px;
+      text-transform: uppercase;
+    }
+
+    .nav-button {
+      width: 100%;
+      background: transparent;
+      border: 0;
+      color: #858585;
+      text-align: left;
+      padding: 10px 11px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 2px;
+      transition: .15s;
+    }
+
+    .nav-button:hover {
+      color: white;
+      background: #171717;
+    }
+
+    .nav-button.active {
+      background: #1a1a1a;
+      color: var(--yellow);
+    }
+
+    .sidebar-user {
+      position: absolute;
+      bottom: 15px;
+      left: 14px;
+      right: 14px;
+      border-top: 1px solid var(--border);
+      padding: 15px 8px 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .user-info strong {
+      display: block;
+      font-size: 12px;
+    }
+
+    .user-info span {
+      display: block;
+      color: #666;
+      font-size: 10px;
+      margin-top: 3px;
+    }
+
+    .logout {
+      background: transparent;
+      border: 0;
+      color: #666;
+      font-size: 11px;
+    }
+
+    .logout:hover {
+      color: var(--danger);
+    }
+
+    .main {
+      margin-left: 235px;
+      min-height: 100vh;
+      padding: 34px;
+    }
+
+    .mobile-header {
+      display: none;
+    }
+
+    .page {
+      max-width: 1300px;
+      margin: auto;
+    }
+
+    .page-header {
+      margin-bottom: 28px;
+    }
+
+    .page-header h1 {
+      font-size: 28px;
+      font-weight: 950;
+      letter-spacing: -.7px;
+    }
+
+    .page-header p {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    /* CARDS */
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .stat-label {
+      color: #777;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 1px;
+      font-weight: 900;
+    }
+
+    .stat-number {
+      font-size: 29px;
+      font-weight: 950;
+      margin-top: 9px;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 21px;
+      margin-bottom: 18px;
+    }
+
+    .card-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 17px;
+    }
+
+    .card-title h2 {
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .card-title span {
+      color: #555;
+      font-size: 10px;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+
+    /* TASK */
+
+    .task {
+      border: 1px solid #222;
+      background: #0e0e0e;
+      border-radius: 8px;
+      padding: 13px;
+      margin-bottom: 9px;
+    }
+
+    .task:last-child {
+      margin-bottom: 0;
+    }
+
+    .task-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .task-name {
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .task-description {
+      color: #777;
+      font-size: 11px;
+      margin-top: 5px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 7px;
+      border-radius: 5px;
+      font-size: 8px;
+      font-weight: 900;
+      text-transform: uppercase;
+      background: #222;
+      color: #aaa;
+      white-space: nowrap;
+    }
+
+    .badge-yellow {
+      background: rgba(250,204,21,.12);
+      color: var(--yellow);
+    }
+
+    .badge-green {
+      background: rgba(34,197,94,.1);
+      color: var(--green);
+    }
+
+    .badge-red {
+      background: rgba(239,68,68,.1);
+      color: var(--danger);
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 7px;
+      margin-top: 11px;
+    }
+
+    .mini-button {
+      border: 1px solid #292929;
+      background: transparent;
+      color: #999;
+      padding: 6px 9px;
+      border-radius: 5px;
+      font-size: 10px;
+    }
+
+    .mini-button:hover {
+      border-color: var(--yellow);
+      color: var(--yellow);
+    }
+
+    /* UPDATE */
+
+    .update {
+      padding: 13px 0;
+      border-bottom: 1px solid #1d1d1d;
+    }
+
+    .update:last-child {
+      border-bottom: 0;
+    }
+
+    .update h3 {
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+
+    .update p {
+      color: #777;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .update-meta {
+      color: #555;
+      font-size: 9px;
+      margin-top: 7px;
+    }
+
+    /* TABLE */
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      text-align: left;
+      color: #666;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 13px 10px;
+      border-bottom: 1px solid #1c1c1c;
+      font-size: 12px;
+      color: #bbb;
+    }
+
+    td strong {
+      color: white;
+    }
+
+    /* EMPTY */
+
+    .empty {
+      color: #555;
+      font-size: 12px;
+      text-align: center;
+      padding: 25px 10px;
+    }
+
+    /* FORMS */
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    /* MOBILE */
+
+    @media(max-width: 850px) {
+
+      .sidebar {
+        display: none;
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 75px 18px 25px;
+      }
+
+      .mobile-header {
+        display: flex;
+        position: fixed;
+        z-index: 100;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 58px;
+        background: #0c0c0c;
+        border-bottom: 1px solid var(--border);
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 18px;
+      }
+
+      .mobile-header strong {
+        font-size: 13px;
+      }
+
+      .mobile-menu {
+        background: transparent;
+        border: 0;
+        color: white;
+        font-size: 20px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .full {
+        grid-column: auto;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     LOGIN
+========================================================= -->
+
+<section id="loginPage">
+
+  <div class="login-container">
+
+    <div class="brand">
+
+      <div class="brand-logo">
+        F
+      </div>
+
+      <h1>FRT STAFF</h1>
+
+      <p>
+        Fruity Staff Portal
+      </p>
+
+    </div>
+
+    <div class="login-card">
+
+      <h2>
+        Welcome back
+      </h2>
+
+      <p class="login-card-description">
+        Sign in to access the FRT staff portal.
+      </p>
+
+      <div
+        id="loginMessage"
+        class="login-message hidden"
+      ></div>
+
+      <form id="loginForm">
+
+        <div class="form-group">
+
+          <label>
+            Username
+          </label>
+
+          <input
+            id="loginUsername"
+            type="text"
+            placeholder="Enter your username"
+            autocomplete="username"
+            required
+          >
+
+        </div>
+
+        <div class="form-group">
+
+          <label>
+            Password
+          </label>
+
+          <input
+            id="loginPassword"
+            type="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            required
+          >
+
+        </div>
+
+        <button
+          class="yellow-button"
+          type="submit"
+        >
+          Sign In
+        </button>
+
+      </form>
+
+      <div class="login-divider">
+        NEW STAFF
+      </div>
+
+      <button
+        class="outline-button"
+        onclick="openRequestModal()"
+      >
+        Request Staff Access
+      </button>
+
+      <button
+        class="small-link"
+        onclick="openInviteModal()"
+      >
+        Have an invitation? Accept invitation
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     PORTAL
+========================================================= -->
+
+<section
+  id="portal"
+  class="hidden"
+>
+
+  <div class="mobile-header">
+
+    <strong>
+      FRT STAFF
+    </strong>
+
+    <button
+      class="mobile-menu"
+      onclick="toggleMobileNav()"
+    >
+      ☰
+    </button>
+
+  </div>
+
+
+  <!-- SIDEBAR -->
+
+  <aside
+    id="sidebar"
+    class="sidebar"
+  >
+
+    <div class="sidebar-brand">
+
+      <div class="sidebar-logo">
+        F
+      </div>
+
+      <div class="sidebar-brand-text">
+
+        <strong>
+          FRT STAFF
+        </strong>
+
+        <span>
+          FRUITY ESPORTS
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="nav-section">
+
+      <div class="nav-title">
+        Main
+      </div>
+
+      <button
+        class="nav-button active"
+        data-page="dashboard"
+        onclick="showPage('dashboard')"
+      >
+        Dashboard
+      </button>
+
+      <button
+        class="nav-button"
+        data-page="rules"
+        onclick="showPage('rules')"
+      >
+        Staff Rules
+      </button>
+
+      <button
+        class="nav-button"
+        data-page="guides"
+        onclick="showPage('guides')"
+      >
+        Guides
+      </button>
+
+      <button
+        class="nav-button"
+        data-page="updates"
+        onclick="showPage('updates')"
+      >
+        Updates
+      </button>
+
+      <button
+        class="nav-button"
+        data-page="polls"
+        onclick="showPage('polls')"
+      >
+        Polls
+      </button>
+
+    </div>
+
+
+    <div class="nav-section">
+
+      <div class="nav-title">
+        Staff
+      </div>
+
+      <button
+        class="nav-button"
+        data-page="tasks"
+        onclick="showPage('tasks')"
+      >
+        Tasks
+      </button>
+
+      <button
+        class="nav-button"
+        data-page="absences"
+        onclick="showPage('absences')"
+      >
+        Absences
+      </button>
+
+      <button
+        class="nav-button"
+        data-page="feedback"
+        onclick="showPage('feedback')"
+      >
+        Feedback
+      </button>
+
+      <button
+        class="nav-button"
+        data-page="evaluation"
+        onclick="showPage('evaluation')"
+      >
+        Self-Evaluation
+      </button>
+
+    </div>
+
+
+    <div
+      id="managementNav"
+      class="nav-section hidden"
+    >
+
+      <div class="nav-title">
+        Management
+      </div>
+
+      <button
+        class="nav-button"
+        data-page="manageTasks"
+        onclick="showPage('manageTasks')"
+      >
+        Manage Tasks
+      </button>
+
+      <button
+        class="nav-button"
+        data-page="manageUpdates"
+        onclick="showPage('manageUpdates')"
+      >
+        Manage Updates
+      </button>
+
+      <button
+        class="nav-button"
+        data-page="manageAbsences"
+        onclick="showPage('manageAbsences')"
+      >
+        Review Absences
+      </button>
+
+    </div>
+
+
+    <div
+      id="adminNav"
+      class="nav-section hidden"
+    >
+
+      <div class="nav-title">
+        Administration
+      </div>
+
+      <button
+        class="nav-button"
+        data-page="staffAccounts"
+        onclick="showPage('staffAccounts')"
+      >
+        Staff Accounts
+      </button>
+
+      <button
+        class="nav-button"
+        data-page="accessRequests"
+        onclick="showPage('accessRequests')"
+      >
+        Access Requests
+      </button>
+
+    </div>
+
+
+    <div class="sidebar-user">
+
+      <div class="user-info">
+
+        <strong id="sidebarUsername">
+          Ghost
+        </strong>
+
+        <span id="sidebarRole">
+          Staff
+        </span>
+
+      </div>
+
+      <button
+        class="logout"
+        onclick="logout()"
+      >
+        Logout
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+    <div class="page">
+
+      <!-- DASHBOARD -->
+
+      <section
+        id="page-dashboard"
+        class="portal-page"
+      >
+
+        <div class="page-header">
+
+          <h1 id="welcomeText">
+            Welcome back
+          </h1>
+
+          <p>
+            Here's what's happening across Fruity.
+          </p>
+
+        </div>
+
+
+        <div class="stats-grid">
+
+          <div class="stat-card">
+
+            <div class="stat-label">
+              Open Tasks
+            </div>
+
+            <div
+              id="statTasks"
+              class="stat-number"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="stat-label">
+              Absence Requests
+            </div>
+
+            <div
+              id="statAbsences"
+              class="stat-number"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="stat-label">
+              New Updates
+            </div>
+
+            <div
+              id="statUpdates"
+              class="stat-number"
+            >
+              0
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="content-grid">
+
+          <div>
+
+            <div class="card">
+
+              <div class="card-title">
+
+                <h2>
+                  Priority Tasks
+                </h2>
+
+                <span>
+                  Your tasks
+                </span>
+
+              </div>
+
+              <div id="dashboardTasks">
+                <div class="empty">
+                  Loading tasks...
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div>
+
+            <div class="card">
+
+              <div class="card-title">
+
+                <h2>
+                  Latest Updates
+                </h2>
+
+                <span>
+                  FRT
+                </span>
+
+              </div>
+
+              <div id="dashboardUpdates">
+                <div class="empty">
+                  Loading updates...
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- RULES -->
+
+      <section
+        id="page-rules"
+        class="portal-page hidden"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            Staff Rules
+          </h1>
+
+          <p>
+            Expectations for every member of the Fruity staff team.
+          </p>
+
+        </div>
+
+        <div class="card">
+
+          <h2 class="card-title">
+            <span></span>
+            General Staff Rules
+          </h2>
+
+          <div class="update">
+            <h3>
+              Professionalism
+            </h3>
+
+            <p>
+              Represent Fruity professionally when communicating
+              with players, staff, partners and the community.
+            </p>
+          </div>
+
+          <div class="update">
+            <h3>
+              Confidentiality
+            </h3>
+
+            <p>
+              Internal information, documents and management
+              discussions must remain within authorized channels.
+            </p>
+          </div>
+
+          <div class="update">
+            <h3>
+              Activity
+            </h3>
+
+            <p>
+              Complete assigned responsibilities and communicate
+              early if you cannot meet a deadline.
+            </p>
+          </div>
+
+          <div class="update">
+            <h3>
+              Respect
+            </h3>
+
+            <p>
+              Treat players, staff, opponents and community members
+              with respect.
+            </p>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- GUIDES -->
+
+      <section
+        id="page-guides"
+        class="portal-page hidden"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            Guides
+          </h1>
+
+          <p>
+            Internal resources and procedures.
+          </p>
+
+        </div>
+
+        <div class="content-grid">
+
+          <div class="card">
+
+            <div class="card-title">
+              <h2>
+                Staff Guide
+              </h2>
+            </div>
+
+            <p class="task-description">
+              General information for new FRT staff members.
+            </p>
+
+          </div>
+
+          <div class="card">
+
+            <div class="card-title">
+              <h2>
+                Content Guide
+              </h2>
+            </div>
+
+            <p class="task-description">
+              Procedures for handling social media and content.
+            </p>
+
+          </div>
+
+          <div class="card">
+
+            <div class="card-title">
+              <h2>
+                Tournament Guide
+              </h2>
+            </div>
+
+            <p class="task-description">
+              Internal tournament and competition procedures.
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- UPDATES -->
+
+      <section
+        id="page-updates"
+        class="portal-page hidden"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            Updates
+          </h1>
+
+          <p>
+            Announcements from Fruity management.
+          </p>
+
+        </div>
+
+        <div
+          id="updatesList"
+          class="card"
+        >
+          Loading...
+        </div>
+
+      </section>
+
+
+      <!-- POLLS -->
+
+      <section
+        id="page-polls"
+        class="portal-page hidden"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            Polls
+          </h1>
+
+          <p>
+            Vote on internal staff decisions.
+          </p>
+
+        </div>
+
+        <div class="card">
+
+          <div class="empty">
+            No active polls yet.
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- TASKS -->
+
+      <section
+        id="page-tasks"
+        class="portal-page hidden"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            Tasks
+          </h1>
+
+          <p>
+            Tasks assigned to you.
+          </p>
+
+        </div>
+
+        <div
+          id="tasksList"
+          class="card"
+        >
+          Loading...
+        </div>
+
+      </section>
+
+
+      <!-- ABSENCES -->
+
+      <section
+        id="page-absences"
+        class="portal-page hidden"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            Absences
+          </h1>
+
+          <p>
+            Submit and track your availability.
+          </p>
+
+        </div>
+
+        <div class="card">
+
+          <div class="card-title">
+
+            <h2>
+              Request Absence
+            </h2>
+
+          </div>
+
+          <form id="absenceForm">
+
+            <div class="form-grid">
+
+              <div>
+
+                <label>
+                  Start Date
+                </label>
+
+                <input
+                  id="absenceStart"
+                  type="date"
+                  required
+                >
+
+              </div>
+
+              <div>
+
+                <label>
+                  End Date
+                </label>
+
+                <input
+                  id="absenceEnd"
+                  type="date"
+                  required
+                >
+
+              </div>
+
+              <div class="full">
+
+                <label>
+                  Reason
+                </label>
+
+                <textarea
+                  id="absenceReason"
+                  placeholder="Tell management why you'll be unavailable..."
+                ></textarea>
+
+              </div>
+
+              <div class="full">
+
+                <button
+                  class="yellow-button"
+                  type="submit"
+                >
+                  Submit Request
+                </button>
+
+              </div>
+
+            </div>
+
+          </form>
+
+        </div>
+
+      </section>
+
+
+      <!-- FEEDBACK -->
+
+      <section
+        id="page-feedback"
+        class="portal-page hidden"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            Feedback
+          </h1>
+
+          <p>
+            Share suggestions, concerns or ideas with management.
+          </p>
+
+        </div>
+
+        <div class="card">
+
+          <form id="feedbackForm">
+
+            <div class="form-group">
+
+              <label>
+                Feedback
+              </label>
+
+              <textarea
+                id="feedbackContent"
+                placeholder="Write your feedback..."
+                required
+              ></textarea>
+
+            </div>
+
+            <div
+              style="
+                display:flex;
+                align-items:center;
+                gap:8px;
+                margin-bottom:18px;
+              "
+            >
+
+              <input
+                id="feedbackAnonymous"
+                type="checkbox"
+                style="width:auto"
+              >
+
+              <span
+                style="
+                  color:#999;
+                  font-size:12px;
+                "
+              >
+                Submit anonymously
+              </span>
+
+            </div>
+
+            <button
+              class="yellow-button"
+              type="submit"
+            >
+              Submit Feedback
+            </button>
+
+          </form>
+
+        </div>
+
+      </section>
+
+
+      <!-- SELF EVALUATION -->
+
+      <section
+        id="page-evaluation"
+        class="portal-page hidden"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            Self-Evaluation
+          </h1>
+
+          <p>
+            Reflect on your recent staff performance.
+          </p>
+
+        </div>
+
+        <div class="card">
+
+          <div class="form-group">
+
+            <label>
+              How would you rate your activity?
+            </label>
+
+            <select>
+              <option>Excellent</option>
+              <option>Good</option>
+              <option>Average</option>
+              <option>Needs Improvement</option>
+            </select>
+
+          </div>
+
+          <div class="form-group">
+
+            <label>
+              What did you accomplish?
+            </label>
+
+            <textarea
+              placeholder="Describe your recent work..."
+            ></textarea>
+
+          </div>
+
+          <div class="form-group">
+
+            <label>
+              What could you improve?
+            </label>
+
+            <textarea
+              placeholder="What would you like to improve?"
+            ></textarea>
+
+          </div>
+
+          <button
+            class="yellow-button"
+            onclick="alert('Evaluation system will be connected next.')"
+          >
+            Submit Evaluation
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- MANAGE TASKS -->
+
+      <section
+        id="page-manageTasks"
+        class="portal-page hidden"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            Manage Tasks
+          </h1>
+
+          <p>
+            Create and assign work to FRT staff.
+          </p>
+
+        </div>
+
+        <div class="card">
+
+          <form id="taskForm">
+
+            <div class="form-grid">
+
+              <div class="full">
+
+                <label>
+                  Task Title
+                </label>
+
+                <input
+                  id="taskTitle"
+                  placeholder="Example: Prepare tournament graphics"
+                  required
+                >
+
+              </div>
+
+              <div>
+
+                <label>
+                  Assign To User ID
+                </label>
+
+                <input
+                  id="taskAssignedTo"
+                  type="number"
+                  placeholder="User ID"
+                >
+
+              </div>
+
+              <div>
+
+                <label>
+                  Priority
+                </label>
+
+                <select id="taskPriority">
+
+                  <option value="normal">
+                    Normal
+                  </option>
+
+                  <option value="high">
+                    High
+                  </option>
+
+                  <option value="urgent">
+                    Urgent
+                  </option>
+
+                </select>
+
+              </div>
+
+              <div>
+
+                <label>
+                  Due Date
+                </label>
+
+                <input
+                  id="taskDueDate"
+                  type="date"
+                >
+
+              </div>
+
+              <div class="full">
+
+                <label>
+                  Description
+                </label>
+
+                <textarea
+                  id="taskDescription"
+                  placeholder="Task details..."
+                ></textarea>
+
+              </div>
+
+              <div class="full">
+
+                <button
+                  class="yellow-button"
+                  type="submit"
+                >
+                  Create Task
+                </button>
+
+              </div>
+
+            </div>
+
+          </form>
+
+        </div>
+
+      </section>
+
+
+      <!-- MANAGE UPDATES -->
+
+      <section
+        id="page-manageUpdates"
+        class="portal-page hidden"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            Manage Updates
+          </h1>
+
+          <p>
+            Publish announcements to staff.
+          </p>
+
+        </div>
+
+        <div class="card">
+
+          <form id="updateForm">
+
+            <div class="form-group">
+
+              <label>
+                Title
+              </label>
+
+              <input
+                id="updateTitle"
+                placeholder="Announcement title"
+                required
+              >
+
+            </div>
+
+            <div class="form-group">
+
+              <label>
+                Content
+              </label>
+
+              <textarea
+                id="updateContent"
+                placeholder="Write the announcement..."
+                required
+              ></textarea>
+
+            </div>
+
+            <button
+              class="yellow-button"
+              type="submit"
+            >
+              Publish Update
+            </button>
+
+          </form>
+
+        </div>
+
+      </section>
+
+
+      <!-- MANAGE ABSENCES -->
+
+      <section
+        id="page-manageAbsences"
+        class="portal-page hidden"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            Review Absences
+          </h1>
+
+          <p>
+            Review staff availability requests.
+          </p>
+
+        </div>
+
+        <div class="card">
+
+          <div
+            id="managementAbsences"
+            class="table-wrapper"
+          >
+            Loading...
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- STAFF ACCOUNTS -->
+
+      <section
+        id="page-staffAccounts"
+        class="portal-page hidden"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            Staff Accounts
+          </h1>
+
+          <p>
+            View members of the FRT staff team.
+          </p>
+
+        </div>
+
+        <div class="card">
+
+          <div
+            id="staffAccounts"
+            class="table-wrapper"
+          >
+            Loading...
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ACCESS REQUESTS -->
+
+      <section
+        id="page-accessRequests"
+        class="portal-page hidden"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            Access Requests
+          </h1>
+
+          <p>
+            Approve or reject new staff applications.
+          </p>
+
+        </div>
+
+        <div class="card">
+
+          <div
+            id="accessRequests"
+            class="table-wrapper"
+          >
+            Loading...
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+</section>
+
+
+<!-- =========================================================
+     REQUEST ACCESS MODAL
+========================================================= -->
+
+<div
+  id="requestModal"
+  class="modal-overlay hidden"
+>
+
+  <div class="modal">
+
+    <div class="modal-header">
+
+      <h2>
+        Request Staff Access
+      </h2>
+
+      <button
+        class="close-button"
+        onclick="closeModal('requestModal')"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <form id="requestForm">
+
+      <div class="form-group">
+
+        <label>
+          Username
+        </label>
+
+        <input
+          id="requestUsername"
+          placeholder="Username others will see"
+          maxlength="32"
+          required
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>
+          Display Name
+        </label>
+
+        <input
+          id="requestDisplayName"
+          placeholder="Your name"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>
+          Email
+        </label>
+
+        <input
+          id="requestEmail"
+          type="email"
+          placeholder="Private email for account recovery"
+          required
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>
+          Password
+        </label>
+
+        <input
+          id="requestPassword"
+          type="password"
+          placeholder="Create a password"
+          required
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>
+          Department
+        </label>
+
+        <select id="requestDepartment">
+
+          <option>
+            General
+          </option>
+
+          <option>
+            Management
+          </option>
+
+          <option>
+            Content
+          </option>
+
+          <option>
+            Social Media
+          </option>
+
+          <option>
+            Graphics
+          </option>
+
+          <option>
+            Media
+          </option>
+
+          <option>
+            Competitive
+          </option>
+
+        </select>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>
+          Why should you join FRT staff?
+        </label>
+
+        <textarea
+          id="requestReason"
+          placeholder="Tell management a little about yourself..."
+        ></textarea>
+
+      </div>
+
+      <button
+        class="yellow-button"
+        type="submit"
+      >
+        Send Request
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<!-- =========================================================
+     INVITATION MODAL
+========================================================= -->
+
+<div
+  id="inviteModal"
+  class="modal-overlay hidden"
+>
+
+  <div class="modal">
+
+    <div class="modal-header">
+
+      <h2>
+        Accept Invitation
+      </h2>
+
+      <button
+        class="close-button"
+        onclick="closeModal('inviteModal')"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <p
+      style="
+        color:#777;
+        font-size:13px;
+        line-height:1.6;
+        margin-bottom:20px;
+      "
+    >
+      When FRT management sends you an invitation,
+      you'll be able to enter the invitation code here
+      and finish setting up your account.
+    </p>
+
+    <div class="form-group">
+
+      <label>
+        Invitation Code
+      </label>
+
+      <input
+        placeholder="Enter invitation code"
+      >
+
+    </div>
+
+    <button
+      class="yellow-button"
+      onclick="alert('Invitation system will be connected next.')"
+    >
+      Continue
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/*
+|--------------------------------------------------------------------------
+| GLOBAL STATE
+|--------------------------------------------------------------------------
+*/
+
+let currentUser = null;
+
+
+/*
+|--------------------------------------------------------------------------
+| API
+|--------------------------------------------------------------------------
+*/
+
+async function api(url, options = {}) {
+
+  const response = await fetch(url, {
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {})
+    },
+    ...options
+  });
+
+  let data = {};
+
+  try {
+    data = await response.json();
+  } catch {
+    data = {};
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      data.error || "Something went wrong."
+    );
+  }
+
+  return data;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| LOGIN
+|--------------------------------------------------------------------------
+*/
+
+document
+  .getElementById("loginForm")
+  .addEventListener("submit", async (event) => {
+
+    event.preventDefault();
+
+    const username =
+      document
+        .getElementById("loginUsername")
+        .value
+        .trim();
+
+    const password =
+      document
+        .getElementById("loginPassword")
+        .value;
+
+    const message =
+      document.getElementById("loginMessage");
+
+    message.classList.add("hidden");
+
+    try {
+
+      const data = await api("/api/login", {
+        method: "POST",
+        body: JSON.stringify({
+          username,
+          password
+        })
+      });
+
+      currentUser = data.user;
+
+      enterPortal();
+
+    } catch (error) {
+
+      message.textContent = error.message;
+      message.classList.remove("hidden");
+
+    }
+
+  });
+
+
+/*
+|--------------------------------------------------------------------------
+| REQUEST ACCESS
+|--------------------------------------------------------------------------
+*/
+
+document
+  .getElementById("requestForm")
+  .addEventListener("submit", async (event) => {
+
+    event.preventDefault();
+
+    try {
+
+      await api("/api/request-access", {
+        method: "POST",
+        body: JSON.stringify({
+
+          username:
+            document
+              .getElementById("requestUsername")
+              .value
+              .trim(),
+
+          displayName:
+            document
+              .getElementById("requestDisplayName")
+              .value
+              .trim(),
+
+          email:
+            document
+              .getElementById("requestEmail")
+              .value
+              .trim(),
+
+          password:
+            document
+              .getElementById("requestPassword")
+              .value,
+
+          department:
+            document
+              .getElementById("requestDepartment")
+              .value,
+
+          requestedRole:
+            "staff",
+
+          reason:
+            document
+              .getElementById("requestReason")
+              .value
+              .trim()
+
+        })
+      });
+
+      closeModal("requestModal");
+
+      alert(
+        "Request sent! Management will review your application."
+      );
+
+      document
+        .getElementById("requestForm")
+        .reset();
+
+    } catch (error) {
+
+      alert(error.message);
+
+    }
+
+  });
+
+
+/*
+|--------------------------------------------------------------------------
+| ENTER PORTAL
+|--------------------------------------------------------------------------
+*/
+
+function enterPortal() {
+
+  document
+    .getElementById("loginPage")
+    .classList.add("hidden");
+
+  document
+    .getElementById("portal")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("sidebarUsername")
+    .textContent =
+      currentUser.username;
+
+  document
+    .getElementById("sidebarRole")
+    .textContent =
+      capitalize(currentUser.role) +
+      " • " +
+      (currentUser.department || "General");
+
+  document
+    .getElementById("welcomeText")
+    .textContent =
+      "Welcome back, " +
+      currentUser.username;
+
+  if (
+    ["owner", "admin", "manager"]
+      .includes(currentUser.role)
+  ) {
+
+    document
+      .getElementById("managementNav")
+      .classList.remove("hidden");
+
+  }
+
+  if (
+    ["owner", "admin"]
+      .includes(currentUser.role)
+  ) {
+
+    document
+      .getElementById("adminNav")
+      .classList.remove("hidden");
+
+  }
+
+  loadDashboard();
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CHECK SESSION
+|--------------------------------------------------------------------------
+*/
+
+async function checkSession() {
+
+  try {
+
+    const data =
+      await api("/api/me");
+
+    if (data.user) {
+
+      currentUser = data.user;
+
+      enterPortal();
+
+    }
+
+  } catch {
+
+    // Not logged in.
+
+  }
+
+}
+
+checkSession();
+
+
+/*
+|--------------------------------------------------------------------------
+| LOGOUT
+|--------------------------------------------------------------------------
+*/
+
+async function logout() {
+
+  await api("/api/logout", {
+    method: "POST"
+  });
+
+  location.reload();
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| NAVIGATION
+|--------------------------------------------------------------------------
+*/
+
+function showPage(page) {
+
+  document
+    .querySelectorAll(".portal-page")
+    .forEach((element) => {
+
+      element.classList.add("hidden");
+
+    });
+
+  const target =
+    document.getElementById(
+      "page-" + page
+    );
+
+  if (target) {
+    target.classList.remove("hidden");
+  }
+
+  document
+    .querySelectorAll(".nav-button")
+    .forEach((button) => {
+
+      button.classList.remove("active");
+
+    });
+
+  const activeButton =
+    document.querySelector(
+      `[data-page="${page}"]`
+    );
+
+  if (activeButton) {
+    activeButton.classList.add("active");
+  }
+
+  if (page === "dashboard") {
+    loadDashboard();
+  }
+
+  if (page === "tasks") {
+    loadTasks();
+  }
+
+  if (page === "updates") {
+    loadUpdates();
+  }
+
+  if (page === "manageAbsences") {
+    loadManagementAbsences();
+  }
+
+  if (page === "staffAccounts") {
+    loadStaffAccounts();
+  }
+
+  if (page === "accessRequests") {
+    loadAccessRequests();
+  }
+
+  if (window.innerWidth <= 850) {
+    document
+      .getElementById("sidebar")
+      .style.display = "none";
+  }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DASHBOARD
+|--------------------------------------------------------------------------
+*/
+
+async function loadDashboard() {
+
+  try {
+
+    const data =
+      await api("/api/dashboard");
+
+    const openTasks =
+      data.tasks.filter(
+        task =>
+          task.status !== "completed"
+      );
+
+    document
+      .getElementById("statTasks")
+      .textContent =
+        openTasks.length;
+
+    document
+      .getElementById("statAbsences")
+      .textContent =
+        data.absences.filter(
+          a => a.status === "pending"
+        ).length;
+
+    document
+      .getElementById("statUpdates")
+      .textContent =
+        data.updates.length;
+
+    renderTasks(
+      data.tasks,
+      "dashboardTasks"
+    );
+
+    renderUpdates(
+      data.updates,
+      "dashboardUpdates"
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+  }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TASKS
+|--------------------------------------------------------------------------
+*/
+
+async function loadTasks() {
+
+  try {
+
+    const tasks =
+      await api("/api/tasks");
+
+    renderTasks(
+      tasks,
+      "tasksList"
+    );
+
+  } catch (error) {
+
+    document
+      .getElementById("tasksList")
+      .innerHTML =
+        `<div class="empty">${escapeHtml(error.message)}</div>`;
+
+  }
+
+}
+
+
+function renderTasks(tasks, containerId) {
+
+  const container =
+    document.getElementById(containerId);
+
+  if (!tasks.length) {
+
+    container.innerHTML =
+      `<div class="empty">
+        No tasks right now.
+      </div>`;
+
+    return;
+
+  }
+
+  container.innerHTML =
+    tasks
+      .map(task => {
+
+        const priorityClass =
+          task.priority === "urgent" ||
+          task.priority === "high"
+            ? "badge-red"
+            : "badge-yellow";
+
+        const statusClass =
+          task.status === "completed"
+            ? "badge-green"
+            : "badge";
+
+        return `
+          <div class="task">
+
+            <div class="task-top">
+
+              <div>
+
+                <div class="task-name">
+                  ${escapeHtml(task.title)}
+                </div>
+
+                <div class="task-description">
+                  ${escapeHtml(task.description || "")}
+                </div>
+
+              </div>
+
+              <span class="badge ${priorityClass}">
+                ${escapeHtml(task.priority)}
+              </span>
+
+            </div>
+
+            <div
+              style="
+                display:flex;
+                gap:7px;
+                margin-top:10px;
+              "
+            >
+
+              <span class="badge ${statusClass}">
+                ${escapeHtml(task.status)}
+              </span>
+
+              ${
+                task.due_date
+                  ? `<span class="badge">
+                      Due ${escapeHtml(
+                        formatDate(task.due_date)
+                      )}
+                    </span>`
+                  : ""
+              }
+
+            </div>
+
+            ${
+              task.status !== "completed"
+                ? `
+                  <div class="task-actions">
+
+                    <button
+                      class="mini-button"
+                      onclick="completeTask(${task.id})"
+                    >
+                      Mark Complete
+                    </button>
+
+                  </div>
+                `
+                : ""
+            }
+
+          </div>
+        `;
+
+      })
+      .join("");
+
+}
+
+
+async function completeTask(id) {
+
+  try {
+
+    await api(
+      "/api/tasks/" + id,
+      {
+        method: "PATCH",
+        body: JSON.stringify({
+          status: "completed"
+        })
+      }
+    );
+
+    loadTasks();
+    loadDashboard();
+
+  } catch (error) {
+
+    alert(error.message);
+
+  }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| UPDATES
+|--------------------------------------------------------------------------
+*/
+
+async function loadUpdates() {
+
+  try {
+
+    const updates =
+      await api("/api/updates");
+
+    renderUpdates(
+      updates,
+      "updatesList"
+    );
+
+  } catch (error) {
+
+    document
+      .getElementById("updatesList")
+      .innerHTML =
+        `<div class="empty">${escapeHtml(error.message)}</div>`;
+
+  }
+
+}
+
+
+function renderUpdates(updates, containerId) {
+
+  const container =
+    document.getElementById(containerId);
+
+  if (!updates.length) {
+
+    container.innerHTML =
+      `<div class="empty">
+        No updates yet.
+      </div>`;
+
+    return;
+
+  }
+
+  container.innerHTML =
+    updates
+      .map(update => {
+
+        return `
+          <div class="update">
+
+            <h3>
+              ${escapeHtml(update.title)}
+            </h3>
+
+            <p>
+              ${escapeHtml(update.content)}
+            </p>
+
+            <div class="update-meta">
+              ${
+                update.author
+                  ? "Posted by " +
+                    escapeHtml(update.author)
+                  : "FRT Management"
+              }
+              ·
+              ${formatDate(update.created_at)}
+            </div>
+
+          </div>
+        `;
+
+      })
+      .join("");
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CREATE TASK
+|--------------------------------------------------------------------------
+*/
+
+document
+  .getElementById("taskForm")
+  .addEventListener("submit", async event => {
+
+    event.preventDefault();
+
+    try {
+
+      await api("/api/tasks", {
+        method: "POST",
+        body: JSON.stringify({
+
+          title:
+            document
+              .getElementById("taskTitle")
+              .value,
+
+          description:
+            document
+              .getElementById("taskDescription")
+              .value,
+
+          assignedTo:
+            document
+              .getElementById("taskAssignedTo")
+              .value || null,
+
+          priority:
+            document
+              .getElementById("taskPriority")
+              .value,
+
+          dueDate:
+            document
+              .getElementById("taskDueDate")
+              .value || null
+
+        })
+      });
+
+      document
+        .getElementById("taskForm")
+        .reset();
+
+      alert("Task created.");
+
+    } catch (error) {
+
+      alert(error.message);
+
+    }
+
+  });
+
+
+/*
+|--------------------------------------------------------------------------
+| CREATE UPDATE
+|--------------------------------------------------------------------------
+*/
+
+document
+  .getElementById("updateForm")
+  .addEventListener("submit", async event => {
+
+    event.preventDefault();
+
+    try {
+
+      await api("/api/updates", {
+        method: "POST",
+        body: JSON.stringify({
+
+          title:
+            document
+              .getElementById("updateTitle")
+              .value,
+
+          content:
+            document
+              .getElementById("updateContent")
+              .value
+
+        })
+      });
+
+      document
+        .getElementById("updateForm")
+        .reset();
+
+      alert("Update published.");
+
+    } catch (error) {
+
+      alert(error.message);
+
+    }
+
+  });
+
+
+/*
+|--------------------------------------------------------------------------
+| ABSENCE
+|--------------------------------------------------------------------------
+*/
+
+document
+  .getElementById("absenceForm")
+  .addEventListener("submit", async event => {
+
+    event.preventDefault();
+
+    try {
+
+      await api("/api/absences", {
+        method: "POST",
+        body: JSON.stringify({
+
+          startDate:
+            document
+              .getElementById("absenceStart")
+              .value,
+
+          endDate:
+            document
+              .getElementById("absenceEnd")
+              .value,
+
+          reason:
+            document
+              .getElementById("absenceReason")
+              .value
+
+        })
+      });
+
+      document
+        .getElementById("absenceForm")
+        .reset();
+
+      alert(
+        "Absence request submitted."
+      );
+
+    } catch (error) {
+
+      alert(error.message);
+
+    }
+
+  });
+
+
+/*
+|--------------------------------------------------------------------------
+| FEEDBACK
+|--------------------------------------------------------------------------
+*/
+
+document
+  .getElementById("feedbackForm")
+  .addEventListener("submit", async event => {
+
+    event.preventDefault();
+
+    try {
+
+      await api("/api/feedback", {
+        method: "POST",
+        body: JSON.stringify({
+
+          content:
+            document
+              .getElementById("feedbackContent")
+              .value,
+
+          anonymous:
+            document
+              .getElementById("feedbackAnonymous")
+              .checked
+
+        })
+      });
+
+      document
+        .getElementById("feedbackForm")
+        .reset();
+
+      alert(
+        "Feedback submitted."
+      );
+
+    } catch (error) {
+
+      alert(error.message);
+
+    }
+
+  });
+
+
+/*
+|--------------------------------------------------------------------------
+| MANAGEMENT ABSENCES
+|--------------------------------------------------------------------------
+*/
+
+async function loadManagementAbsences() {
+
+  try {
+
+    const absences =
+      await api(
+        "/api/management/absences"
+      );
+
+    const container =
+      document.getElementById(
+        "managementAbsences"
+      );
+
+    if (!absences.length) {
+
+      container.innerHTML =
+        `<div class="empty">
+          No absence requests.
+        </div>`;
+
+      return;
+
+    }
+
+    container.innerHTML = `
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Staff
+            </th>
+
+            <th>
+              Dates
+            </th>
+
+            <th>
+              Reason
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Action
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          ${
+            absences
+              .map(a => `
+                <tr>
+
+                  <td>
+                    <strong>
+                      ${escapeHtml(a.username)}
+                    </strong>
+                  </td>
+
+                  <td>
+                    ${formatDate(a.start_date)}
+                    -
+                    ${formatDate(a.end_date)}
+                  </td>
+
+                  <td>
+                    ${escapeHtml(a.reason || "-")}
+                  </td>
+
+                  <td>
+                    ${escapeHtml(a.status)}
+                  </td>
+
+                  <td>
+
+                    ${
+                      a.status === "pending"
+                        ? `
+                          <button
+                            class="mini-button"
+                            onclick="reviewAbsence(${a.id},'approved')"
+                          >
+                            Approve
+                          </button>
+
+                          <button
+                            class="mini-button"
+                            onclick="reviewAbsence(${a.id},'rejected')"
+                          >
+                            Reject
+                          </button>
+                        `
+                        : "-"
+                    }
+
+                  </td>
+
+                </tr>
+              `)
+              .join("")
+          }
+
+        </tbody>
+
+      </table>
+    `;
+
+  } catch (error) {
+
+    document
+      .getElementById(
+        "managementAbsences"
+      )
+      .innerHTML =
+        `<div class="empty">${escapeHtml(error.message)}</div>`;
+
+  }
+
+}
+
+
+async function reviewAbsence(id, status) {
+
+  try {
+
+    await api(
+      "/api/management/absences/" + id,
+      {
+        method: "PATCH",
+        body: JSON.stringify({
+          status
+        })
+      }
+    );
+
+    loadManagementAbsences();
+
+  } catch (error) {
+
+    alert(error.message);
+
+  }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| STAFF ACCOUNTS
+|--------------------------------------------------------------------------
+*/
+
+async function loadStaffAccounts() {
+
+  try {
+
+    const staff =
+      await api(
+        "/api/management/staff"
+      );
+
+    const container =
+      document.getElementById(
+        "staffAccounts"
+      );
+
+    if (!staff.length) {
+
+      container.innerHTML =
+        `<div class="empty">
+          No staff accounts.
+        </div>`;
+
+      return;
+
+    }
+
+    container.innerHTML = `
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Username
+            </th>
+
+            <th>
+              Role
+            </th>
+
+            <th>
+              Department
+            </th>
+
+            <th>
+              Status
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          ${
+            staff
+              .map(user => `
+                <tr>
+
+                  <td>
+                    <strong>
+                      ${escapeHtml(user.username)}
+                    </strong>
+                  </td>
+
+                  <td>
+                    ${escapeHtml(user.role)}
+                  </td>
+
+                  <td>
+                    ${escapeHtml(user.department || "-")}
+                  </td>
+
+                  <td>
+                    ${escapeHtml(user.status)}
+                  </td>
+
+                </tr>
+              `)
+              .join("")
+          }
+
+        </tbody>
+
+      </table>
+    `;
+
+  } catch (error) {
+
+    document
+      .getElementById(
+        "staffAccounts"
+      )
+      .innerHTML =
+        `<div class="empty">${escapeHtml(error.message)}</div>`;
+
+  }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ACCESS REQUESTS
+|--------------------------------------------------------------------------
+*/
+
+async function loadAccessRequests() {
+
+  try {
+
+    const requests =
+      await api(
+        "/api/management/access-requests"
+      );
+
+    const container =
+      document.getElementById(
+        "accessRequests"
+      );
+
+    if (!requests.length) {
+
+      container.innerHTML =
+        `<div class="empty">
+          No access requests.
+        </div>`;
+
+      return;
+
+    }
+
+    container.innerHTML = `
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Username
+            </th>
+
+            <th>
+              Department
+            </th>
+
+            <th>
+              Requested Role
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Action
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          ${
+            requests
+              .map(request => `
+                <tr>
+
+                  <td>
+                    <strong>
+                      ${escapeHtml(request.username)}
+                    </strong>
+                  </td>
+
+                  <td>
+                    ${escapeHtml(
+                      request.department || "-"
+                    )}
+                  </td>
+
+                  <td>
+                    ${escapeHtml(
+                      request.requested_role
+                    )}
+                  </td>
+
+                  <td>
+                    ${escapeHtml(request.status)}
+                  </td>
+
+                  <td>
+
+                    ${
+                      request.status === "pending"
+                        ? `
+                          <button
+                            class="mini-button"
+                            onclick="approveRequest(${request.id})"
+                          >
+                            Approve
+                          </button>
+
+                          <button
+                            class="mini-button"
+                            onclick="rejectRequest(${request.id})"
+                          >
+                            Reject
+                          </button>
+                        `
+                        : "-"
+                    }
+
+                  </td>
+
+                </tr>
+              `)
+              .join("")
+          }
+
+        </tbody>
+
+      </table>
+    `;
+
+  } catch (error) {
+
+    document
+      .getElementById(
+        "accessRequests"
+      )
+      .innerHTML =
+        `<div class="empty">${escapeHtml(error.message)}</div>`;
+
+  }
+
+}
+
+
+async function approveRequest(id) {
+
+  if (
+    !confirm(
+      "Approve this staff member?"
+    )
+  ) {
+    return;
+  }
+
+  try {
+
+    await api(
+      "/api/management/access-requests/" +
+        id +
+        "/approve",
+      {
+        method: "POST"
+      }
+    );
+
+    loadAccessRequests();
+
+    alert(
+      "Staff member approved."
+    );
+
+  } catch (error) {
+
+    alert(error.message);
+
+  }
+
+}
+
+
+async function rejectRequest(id) {
+
+  if (
+    !confirm(
+      "Reject this access request?"
+    )
+  ) {
+    return;
+  }
+
+  try {
+
+    await api(
+      "/api/management/access-requests/" +
+        id +
+        "/reject",
+      {
+        method: "POST"
+      }
+    );
+
+    loadAccessRequests();
+
+  } catch (error) {
+
+    alert(error.message);
+
+  }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| MODALS
+|--------------------------------------------------------------------------
+*/
+
+function openRequestModal() {
+
+  document
+    .getElementById("requestModal")
+    .classList.remove("hidden");
+
+}
+
+function openInviteModal() {
+
+  document
+    .getElementById("inviteModal")
+    .classList.remove("hidden");
+
+}
+
+function closeModal(id) {
+
+  document
+    .getElementById(id)
+    .classList.add("hidden");
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| MOBILE
+|--------------------------------------------------------------------------
+*/
+
+function toggleMobileNav() {
+
+  const sidebar =
+    document.getElementById(
+      "sidebar"
+    );
+
+  if (
+    sidebar.style.display === "block"
+  ) {
+
+    sidebar.style.display = "none";
+
+  } else {
+
+    sidebar.style.display = "block";
+    sidebar.style.zIndex = "200";
+
+  }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| HELPERS
+|--------------------------------------------------------------------------
+*/
+
+function capitalize(value) {
+
+  if (!value) return "";
+
+  return (
+    value.charAt(0).toUpperCase() +
+    value.slice(1)
+  );
+
+}
+
+
+function formatDate(value) {
+
+  if (!value) return "-";
+
+  const date =
+    new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return date.toLocaleDateString(
+    "en-ZA",
+    {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    }
+  );
+
+}
+
+
+function escapeHtml(value) {
+
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+}
+
+</script>
+
+</body>
+</html>
